@@ -1,6 +1,7 @@
 package ru.oksidisko.ui.model;
 
 import ru.oksidisko.model.ProtocolEntity;
+import ru.oksidisko.model.User;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
@@ -40,5 +41,10 @@ public class ProtocolForTopicTableModel extends AbstractTableModel {
             case 4: return entity.getEndDate();
             default: return "unknown column";
         }
+    }
+
+    public User getUserById(int index) {
+        ProtocolEntity entity = data.get(index);
+        return entity.getUser();
     }
 }

@@ -1,24 +1,32 @@
 package ru.oksidisko.ui;
 
 import ru.oksidisko.controller.Controller;
+import ru.oksidisko.model.ProtocolEntity;
 import ru.oksidisko.model.Topic;
+import ru.oksidisko.model.User;
 import ru.oksidisko.ui.model.ProtocolForTopicTableModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.List;
 
-public class UserToTopicLinkingFrame extends JInternalFrame {
+public class UserToTopicLinkingFrame extends JInternalFrame implements ActionListener {
+    public static final String SELECT_USER_FOR_UPDATE = "Select topic for update";
     private final Controller controller;
     private static JFrame owner = null;
     private static final int xOffset = 30, yOffset = 30;
-    private final JButton addBtn = new JButton("Add");
-    private final JButton updateBtn = new JButton("Update");
-    private final JButton deleteBtn = new JButton("Delete");
+    private final JButton addBtn = new JButton("Add User");
+    private final JButton updateBtn = new JButton("Update Payment Info");
+    private final JButton deleteBtn = new JButton("Delete User");
     private final JButton specialBtn = new JButton("Special");
     private static Topic shownTopic;
     private static JLabel topicTitle = new JLabel("");
     private static JInternalFrame instance = new UserToTopicLinkingFrame();
     private JTable table;
+    private LinkageFrameListener listener;
 
     public UserToTopicLinkingFrame() {
         super("Manage topics",
@@ -39,7 +47,29 @@ public class UserToTopicLinkingFrame extends JInternalFrame {
     }
 
     private void setListeners() {
+        addBtn.addActionListener(this);
+        updateBtn.addActionListener(this);
+        deleteBtn.addActionListener(this);
+        specialBtn.addActionListener(this);
 
+        listener = new LinkageFrameListener() {
+            @Override
+            public void userAdded(User user) {
+                List<ProtocolEntity> entities = controller.getProtocolForTopic(shownTopic);
+                entities.add(new ProtocolEntity(-1,user, 1000, 0, new Date()));
+                ((ProtocolForTopicTableModel)table.getModel()).setData(entities);
+            }
+
+            @Override
+            public void userUpdated(User user) {
+
+            }
+
+            @Override
+            public void userDeleted(User user) {
+
+            }
+        };
     }
 
     private void initLayout() {
@@ -97,5 +127,32 @@ public class UserToTopicLinkingFrame extends JInternalFrame {
         topicTitle.setText(topic.getName());
         owner = frame;
         return instance;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == addBtn) {
+            System.out.println("Add button pressed");
+            JDialog dialog = new AddUserToTopicDialog(owner, listener);
+            dialog.setVisible(true);
+        }
+        /*else if (e.getSource() == updateBtn) {
+            System.out.println("Update button pressed");
+            Topic editedTopic = getSelectedTopic();
+            if (editedTopic == null) {
+                JOptionPane.showMessageDialog(this, SELECT_USER_FOR_UPDATE);
+            } else {
+                JDialog dialog = new AddUpdateUserDialog(owner, listener, editedUser);
+                dialog.setVisible(true);
+            }
+        }*/ else if (e.getSource() == deleteBtn) {
+            System.out.println("Delete button pressed");
+            int selectedRow = table.getSelectedRow();
+            User deletedUser = ((ProtocolForTopicTableModel)table.getModel()).getUserById(selectedRow);
+            controller.removeUserFromTopic(shownTopic, deletedUser);
+            table.repaint();
+        } else if (e.getSource() == specialBtn) {
+            System.out.println("Special button pressed");
+        }
     }
 }

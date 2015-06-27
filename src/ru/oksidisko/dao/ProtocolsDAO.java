@@ -31,4 +31,10 @@ public class ProtocolsDAO {
         if (topic != null)
             map.put(topic, protocolForTopic);
     }
+
+
+    public void removeUserFromTopic(Topic topic, User user) {
+        //map.get(topic).remove(user);
+        list.remove(user);
+    }
 }
