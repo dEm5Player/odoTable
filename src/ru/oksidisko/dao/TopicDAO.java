@@ -1,5 +1,7 @@
 package ru.oksidisko.dao;
 
+import ru.oksidisko.controller.keys.KeyCategory;
+import ru.oksidisko.controller.keys.UniqueKeyProvider;
 import ru.oksidisko.model.Topic;
 
 import java.util.ArrayList;
@@ -8,38 +10,38 @@ import java.util.Date;
 import java.util.List;
 
 public class TopicDAO {
-    private List<Topic> topics = new ArrayList<>();
+    private static final Topic EMPTY_TOPIC = new Topic(-1, "Empty", new Date());
+    private static List<Topic> topics = new ArrayList<>();
 
-    public List<Topic> getAllTopics() {
+    static {
         Calendar cal = Calendar.getInstance();
         cal.set(2016, Calendar.JANUARY, 15);
         Date date = cal.getTime();
 
 
-        topics.add(new Topic(1, "Vizov", date));
+        topics.add(new Topic(UniqueKeyProvider.generateLongId(KeyCategory.TOPIC), "Vizov", date));
 
         cal.set(2016, Calendar.FEBRUARY, 25);
         date = cal.getTime();
-        topics.add(new Topic(2, "Camp", date));
+        topics.add(new Topic(UniqueKeyProvider.generateLongId(KeyCategory.TOPIC), "Camp", date));
 
         cal.set(2016, Calendar.JULY, 7);
         date = cal.getTime();
-        topics.add(new Topic(3, "Equipment", date));
+        topics.add(new Topic(UniqueKeyProvider.generateLongId(KeyCategory.TOPIC), "Equipment", date));
+    }
+
+    private static TopicDAO instance = new TopicDAO();
+
+    public static TopicDAO getInstance() {
+        return instance;
+    }
+
+    public List<Topic> getAllTopics() {
         return topics;
     }
 
     public void addTopic(Topic topic) {
-        long lastIndex = getLastIndex() + 1;
-        topics.add(new Topic(lastIndex, topic.getName(), topic.getDate()));
-    }
-
-    public long getLastIndex() {
-        long lastIndex = 0;
-        for (Topic topic : topics) {
-            if (topic.getId() > lastIndex)
-                lastIndex = topic.getId();
-        }
-        return lastIndex;
+        topics.add(new Topic(UniqueKeyProvider.generateLongId(KeyCategory.TOPIC), topic.getName(), topic.getDate()));
     }
 
     public void removeTopic(int index) {
@@ -50,5 +52,13 @@ public class TopicDAO {
         long id = topics.get(index).getId();
         topics.remove(index);
         topics.add(index, new Topic(id, topic.getName(), topic.getDate()));
+    }
+
+    public Topic getTopicById(int id) {
+        for (Topic topic : topics)
+            if (topic.getId() == id)
+                return topic;
+
+        return EMPTY_TOPIC;
     }
 }

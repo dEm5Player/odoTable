@@ -8,23 +8,28 @@ import java.util.*;
 
 public class ProtocolsDAO {
     private HashMap<Topic, List<ProtocolEntity>> map = new HashMap<>();
-    private long tmpId = -1;
 
-    private ProtocolEntity STAB_ENTITY = new ProtocolEntity(-1, new User(-2, "Test Name", "test nick"), 1000, 850, new Date());
-    private ProtocolEntity STAB_ENTITY2 = new ProtocolEntity(-1, new User(-3, "Test Name2", "test nick2"), 900, 350, new Date());
-    private List<ProtocolEntity> list = new ArrayList<>();
+
     {
+        UserDAO userDAO = UserDAO.getInstance();
+        TopicDAO topicDAO = TopicDAO.getInstance();
+
+        ProtocolEntity STAB_ENTITY = new ProtocolEntity(-1, userDAO.getUserById(1), 1000, 850, new Date());
+        ProtocolEntity STAB_ENTITY2 = new ProtocolEntity(-1, userDAO.getUserById(1), 900, 350, new Date());
+        List<ProtocolEntity> list = new ArrayList<>();
         list.add(STAB_ENTITY);
         list.add(STAB_ENTITY2);
+
+        map.put(topicDAO.getTopicById(1), list);
     }
+
     public List<ProtocolEntity> getProtocolForTopic(Topic topic) {
-//        List<ProtocolEntity> protocolForTopic = map.get(topic);
-//        if (topic == null) {
-//            protocolForTopic = new ArrayList<>();
-//            map.put(topic, protocolForTopic);
-//        }
-//        return protocolForTopic;
-        return list;
+        List<ProtocolEntity> protocolForTopic = map.get(topic);
+        if (protocolForTopic == null) {
+            protocolForTopic = new ArrayList<>();
+            map.put(topic, protocolForTopic);
+        }
+        return protocolForTopic;
     }
 
     public void setProtocolForTopic(Topic topic, List<ProtocolEntity> protocolForTopic){
@@ -33,29 +38,24 @@ public class ProtocolsDAO {
     }
 
 
-    public void updateLinkedEntity(Topic shownTopic, ProtocolEntity updatedEntity, ProtocolEntity newEntity) {
-//        List<ProtocolEntity> protocolForTopic = map.get(topic);
-        int index = 0;
-        for (ProtocolEntity protocolEntity : list) {
-            if (protocolEntity.getUser().getName().equals(updatedEntity.getUser().getName())) {
-                break;
+    public void updateLinkedEntity(Topic topic, ProtocolEntity updatedEntity, ProtocolEntity newEntity) {
+        List<ProtocolEntity> protocolForTopic = map.get(topic);
+        if (!protocolForTopic.isEmpty()) {
+            int index = 0;
+            for (ProtocolEntity protocolEntity : protocolForTopic) {
+                if (protocolEntity.getUser().getName().equals(updatedEntity.getUser().getName())) {
+                    break;
+                }
+                index++;
             }
-            index++;
+            protocolForTopic.remove(index);
+            protocolForTopic.add(index, newEntity);
+        } else {
+            protocolForTopic.add(newEntity); // todo: или тут эксепшен должен быть?
         }
-        list.remove(index);
-        list.add(index, newEntity);
     }
 
     public void removeUserFromTopic(Topic topic, ProtocolEntity entity) {
-        //map.get(topic).remove(user);
-/*        ProtocolEntity removedEntity = null;
-        for (ProtocolEntity protocolEntity : list) {
-            if (Objects.equals(protocolEntity.getUser().getName(), user.getName())) {
-                removedEntity = protocolEntity;
-                break;
-            }
-        }*/
-        if (entity != null)
-            list.remove(entity);
+        map.get(topic).remove(entity);
     }
 }

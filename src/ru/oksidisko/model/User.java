@@ -4,9 +4,9 @@ package ru.oksidisko.model;
 public class User {
     private String name;
     private String nick;
-    private int id;
+    private long id;
 
-    public User(int id, String name, String nick) {
+    public User(long id, String name, String nick) {
         this.id = id;
         this.name = name;
         this.nick = nick;
@@ -20,7 +20,7 @@ public class User {
         return nick;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 }
