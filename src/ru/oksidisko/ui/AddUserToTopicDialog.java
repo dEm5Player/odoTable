@@ -51,11 +51,7 @@ public class AddUserToTopicDialog extends JDialog {
         okBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (editedUser == null) {
-                    listener.userAdded(buildUser());
-                } else {
-                    listener.userUpdated(buildUser());
-                }
+                listener.userAdded(buildUser());
                 setVisible(false);
             }
         });

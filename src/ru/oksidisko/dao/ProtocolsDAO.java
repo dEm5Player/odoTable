@@ -33,8 +33,29 @@ public class ProtocolsDAO {
     }
 
 
-    public void removeUserFromTopic(Topic topic, User user) {
+    public void updateLinkedEntity(Topic shownTopic, ProtocolEntity updatedEntity, ProtocolEntity newEntity) {
+//        List<ProtocolEntity> protocolForTopic = map.get(topic);
+        int index = 0;
+        for (ProtocolEntity protocolEntity : list) {
+            if (protocolEntity.getUser().getName().equals(updatedEntity.getUser().getName())) {
+                break;
+            }
+            index++;
+        }
+        list.remove(index);
+        list.add(index, newEntity);
+    }
+
+    public void removeUserFromTopic(Topic topic, ProtocolEntity entity) {
         //map.get(topic).remove(user);
-        list.remove(user);
+/*        ProtocolEntity removedEntity = null;
+        for (ProtocolEntity protocolEntity : list) {
+            if (Objects.equals(protocolEntity.getUser().getName(), user.getName())) {
+                removedEntity = protocolEntity;
+                break;
+            }
+        }*/
+        if (entity != null)
+            list.remove(entity);
     }
 }

@@ -61,13 +61,11 @@ public class UserToTopicLinkingFrame extends JInternalFrame implements ActionLis
             }
 
             @Override
-            public void userUpdated(User user) {
-
-            }
-
-            @Override
-            public void userDeleted(User user) {
-
+            public void userUpdated(ProtocolEntity newEntity) {
+                ProtocolEntity updatedEntity = getSelectedEntity();
+                if (updatedEntity != null) {
+                    controller.updateLinkedEntity(shownTopic, updatedEntity, newEntity);
+                }
             }
         };
     }
@@ -135,24 +133,29 @@ public class UserToTopicLinkingFrame extends JInternalFrame implements ActionLis
             System.out.println("Add button pressed");
             JDialog dialog = new AddUserToTopicDialog(owner, listener);
             dialog.setVisible(true);
-        }
-        /*else if (e.getSource() == updateBtn) {
+        } else if (e.getSource() == updateBtn) {
             System.out.println("Update button pressed");
-            Topic editedTopic = getSelectedTopic();
-            if (editedTopic == null) {
+            ProtocolEntity editedEntity = getSelectedEntity();
+            if (editedEntity == null) {
                 JOptionPane.showMessageDialog(this, SELECT_USER_FOR_UPDATE);
             } else {
-                JDialog dialog = new AddUpdateUserDialog(owner, listener, editedUser);
+                JDialog dialog = new UpdateUserPaymentsDialog(owner, listener, editedEntity);
                 dialog.setVisible(true);
             }
-        }*/ else if (e.getSource() == deleteBtn) {
+        } else if (e.getSource() == deleteBtn) {
             System.out.println("Delete button pressed");
             int selectedRow = table.getSelectedRow();
-            User deletedUser = ((ProtocolForTopicTableModel)table.getModel()).getUserById(selectedRow);
-            controller.removeUserFromTopic(shownTopic, deletedUser);
+            ProtocolEntity deletedEntity = ((ProtocolForTopicTableModel) table.getModel()).getEntityById(selectedRow);
+            controller.removeUserFromTopic(shownTopic, deletedEntity);
             table.repaint();
         } else if (e.getSource() == specialBtn) {
             System.out.println("Special button pressed");
         }
     }
+
+    public ProtocolEntity getSelectedEntity() {
+        int index = table.getSelectedRow();
+        return index < 0 ? null : ((ProtocolForTopicTableModel)table.getModel()).getEntityById(index);
+    }
+
 }

@@ -54,7 +54,11 @@ public class Controller {
         return protocolsDAO.getProtocolForTopic(topic);
     }
 
-    public void removeUserFromTopic(Topic topic, User user) {
-        protocolsDAO.removeUserFromTopic(topic, user);
+    public void removeUserFromTopic(Topic topic, ProtocolEntity entity) {
+        protocolsDAO.removeUserFromTopic(topic, entity);
+    }
+
+    public void updateLinkedEntity(Topic shownTopic, ProtocolEntity updatedEntity, ProtocolEntity newEntity) {
+        protocolsDAO.updateLinkedEntity(shownTopic, updatedEntity, newEntity);
     }
 }
