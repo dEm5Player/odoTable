@@ -1,6 +1,7 @@
 package ru.oksidisko.ui;
 
 import ru.oksidisko.controller.Controller;
+import ru.oksidisko.dao.UserDAO;
 import ru.oksidisko.model.User;
 import ru.oksidisko.ui.model.UserTableModel;
 
@@ -69,6 +70,14 @@ public class ManageUsersFrame extends JInternalFrame implements ActionListener {
                 }
             }
         };
+        UserDAO.addListener(new UserDAO.Listener() {
+            @Override
+            public void usersLoaded() {
+                ((UserTableModel)table.getModel()).setData(controller.getAllUsers());
+                ((UserTableModel)table.getModel()).fireTableDataChanged();
+                repaint();
+            }
+        });
     }
 
     private void initLayout() {

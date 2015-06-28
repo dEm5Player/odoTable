@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO {
+    private static List<Listener> listeners = new ArrayList<>();
+    // for example for case: user deleted but contained in protocols
     public static User EMPTY_USER = new User(-1, "Empty", "Empty");
 
     private static List<User> users = new ArrayList<>();
@@ -15,6 +17,14 @@ public class UserDAO {
         users.add(new User(UniqueKeyProvider.generateLongId(KeyCategory.USER), "Andreev Denis", "dEm"));
         users.add(new User(UniqueKeyProvider.generateLongId(KeyCategory.USER), "Antonov Kirill", "Shine"));
         users.add(new User(UniqueKeyProvider.generateLongId(KeyCategory.USER), "Leschinsky Sergey", "Lesch"));
+    }
+
+    public static void addListener(Listener listener) {
+        listeners.add(listener);
+    }
+
+    public static void removeListener(Listener listener) {
+        listeners.remove(listener);
     }
 
     private static UserDAO instance = new UserDAO();
@@ -31,6 +41,7 @@ public class UserDAO {
         users.add(new User(UniqueKeyProvider.generateLongId(KeyCategory.USER), user.getName(), user.getNick()));
     }
 
+    // future: check user for participation in protocols before remove
     public static void removeUser(int index) {
         users.remove(index);
     }
@@ -51,5 +62,16 @@ public class UserDAO {
 
     public static void loadUsers(List<User> usersToReplace) {
         users = usersToReplace;
+        notifyUpdated();
+    }
+
+    private static void notifyUpdated() {
+        for (Listener listener : listeners) {
+            listener.usersLoaded();
+        }
+    }
+
+    public interface Listener {
+        void usersLoaded();
     }
 }

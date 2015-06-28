@@ -13,6 +13,7 @@ public class Starter extends JFrame implements ActionListener {
     public static final String MANAGE_USERS = "Manage users";
     public static final String MANAGE_TOPICS = "Manage topics";
     public static final String SAVE_CONFIG = "Save Configuration";
+    public static final String LOAD_CONFIG = "Load Configuration";
 
 
     public static final String ACTIONS = "Actions";
@@ -59,6 +60,8 @@ public class Starter extends JFrame implements ActionListener {
         // Save configuration item
         createMenuItem(menu, SAVE_CONFIG, KeyEvent.VK_S);
 
+        // Load configuration item
+        createMenuItem(menu, LOAD_CONFIG, KeyEvent.VK_L);
 
         //Set up the last menu item.
         createMenuItem(menu, QUIT, KeyEvent.VK_Q);
@@ -90,10 +93,17 @@ public class Starter extends JFrame implements ActionListener {
             case SAVE_CONFIG:
                 saveConfig();
                 break;
+            case LOAD_CONFIG:
+                loadConfig();
+                break;
             default:  //quit
                 quit();
                 break;
         }
+    }
+
+    private void loadConfig() {
+        saver.restoreFromFile();
     }
 
     private void saveConfig() {
