@@ -1,11 +1,15 @@
 package ru.oksidisko.ui;
 
+import ru.oksidisko.controller.ConfigSaver;
+
 import javax.swing.*;
 
 import java.awt.event.*;
 import java.awt.*;
 
 public class Starter extends JFrame implements ActionListener {
+    private ConfigSaver saver = new ConfigSaver();
+
     public static final String MANAGE_USERS = "Manage users";
     public static final String MANAGE_TOPICS = "Manage topics";
     public static final String SAVE_CONFIG = "Save Configuration";
@@ -93,7 +97,7 @@ public class Starter extends JFrame implements ActionListener {
     }
 
     private void saveConfig() {
-
+        saver.saveToFile();
     }
 
     //Create a new internal frame.

@@ -10,11 +10,15 @@ import java.util.List;
 public class UserDAO {
     public static User EMPTY_USER = new User(-1, "Empty", "Empty");
 
-    private List<User> users = new ArrayList<>();
-    {
+    private static List<User> users = new ArrayList<>();
+    static {
         users.add(new User(UniqueKeyProvider.generateLongId(KeyCategory.USER), "Andreev Denis", "dEm"));
         users.add(new User(UniqueKeyProvider.generateLongId(KeyCategory.USER), "Antonov Kirill", "Shine"));
         users.add(new User(UniqueKeyProvider.generateLongId(KeyCategory.USER), "Leschinsky Sergey", "Lesch"));
+    }
+
+    {
+        System.out.println("test");
     }
 
     private static UserDAO instance = new UserDAO();
@@ -23,25 +27,25 @@ public class UserDAO {
         return instance;
     }
 
-    public List<User> getAllUsers() {
+    public static List<User> getAllUsers() {
         return users;
     }
 
-    public void addUser(User user) {
+    public static void addUser(User user) {
         users.add(new User(UniqueKeyProvider.generateLongId(KeyCategory.USER), user.getName(), user.getNick()));
     }
 
-    public void removeUser(int index) {
+    public static void removeUser(int index) {
         users.remove(index);
     }
 
-    public void updateUser(User user, int index) {
+    public static void updateUser(User user, int index) {
         long id = users.get(index).getId();
         users.remove(index);
         users.add(index, new User(id, user.getName(), user.getNick()));
     }
 
-    public User getUserById(long id) {
+    public static User getUserById(long id) {
         for (User user : users)
             if (user.getId() == id)
                 return user;

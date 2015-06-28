@@ -6,23 +6,20 @@ import ru.oksidisko.model.Topic;
 import java.util.*;
 
 public class ProtocolsDAO {
-    private HashMap<Topic, List<ProtocolEntity>> map = new HashMap<>();
+    private static Map<Topic, List<ProtocolEntity>> map = new HashMap<>();
 
 
-    {
-        UserDAO userDAO = UserDAO.getInstance();
-        TopicDAO topicDAO = TopicDAO.getInstance();
-
-        ProtocolEntity STAB_ENTITY = new ProtocolEntity(-1, userDAO.getUserById(0), 1000, 850, new Date());
-        ProtocolEntity STAB_ENTITY2 = new ProtocolEntity(-1, userDAO.getUserById(1), 900, 350, new Date());
+    static {
+        ProtocolEntity STAB_ENTITY = new ProtocolEntity(-1, UserDAO.getUserById(0), 1000, 850, new Date());
+        ProtocolEntity STAB_ENTITY2 = new ProtocolEntity(-1, UserDAO.getUserById(1), 900, 350, new Date());
         List<ProtocolEntity> list = new ArrayList<>();
         list.add(STAB_ENTITY);
         list.add(STAB_ENTITY2);
 
-        map.put(topicDAO.getTopicById(0), list);
+        map.put(TopicDAO.getTopicById(0), list);
     }
 
-    public List<ProtocolEntity> getProtocolForTopic(Topic topic) {
+    public static List<ProtocolEntity> getProtocolForTopic(Topic topic) {
         List<ProtocolEntity> protocolForTopic = map.get(topic);
         if (protocolForTopic == null) {
             protocolForTopic = new ArrayList<>();
@@ -31,13 +28,13 @@ public class ProtocolsDAO {
         return protocolForTopic;
     }
 
-    public void setProtocolForTopic(Topic topic, List<ProtocolEntity> protocolForTopic){
+    public static void setProtocolForTopic(Topic topic, List<ProtocolEntity> protocolForTopic){
         if (topic != null)
             map.put(topic, protocolForTopic);
     }
 
 
-    public void updateLinkedEntity(Topic topic, ProtocolEntity updatedEntity, ProtocolEntity newEntity) {
+    public static void updateLinkedEntity(Topic topic, ProtocolEntity updatedEntity, ProtocolEntity newEntity) {
         List<ProtocolEntity> protocolForTopic = map.get(topic);
         if (!protocolForTopic.isEmpty()) {
             int index = 0;
@@ -55,7 +52,11 @@ public class ProtocolsDAO {
         }
     }
 
-    public void removeUserFromTopic(Topic topic, ProtocolEntity entity) {
+    public static void removeUserFromTopic(Topic topic, ProtocolEntity entity) {
         map.get(topic).remove(entity);
+    }
+
+    public static Map<Topic, List<ProtocolEntity>> getAllProtocols() {
+        return map;
     }
 }

@@ -36,25 +36,25 @@ public class TopicDAO {
         return instance;
     }
 
-    public List<Topic> getAllTopics() {
+    public static List<Topic> getAllTopics() {
         return topics;
     }
 
-    public void addTopic(Topic topic) {
+    public static void addTopic(Topic topic) {
         topics.add(new Topic(UniqueKeyProvider.generateLongId(KeyCategory.TOPIC), topic.getName(), topic.getDate()));
     }
 
-    public void removeTopic(int index) {
+    public static void removeTopic(int index) {
         topics.remove(index);
     }
 
-    public void updateTopic(Topic topic, int index) {
+    public static void updateTopic(Topic topic, int index) {
         long id = topics.get(index).getId();
         topics.remove(index);
         topics.add(index, new Topic(id, topic.getName(), topic.getDate()));
     }
 
-    public Topic getTopicById(int id) {
+    public static Topic getTopicById(int id) {
         for (Topic topic : topics)
             if (topic.getId() == id)
                 return topic;
