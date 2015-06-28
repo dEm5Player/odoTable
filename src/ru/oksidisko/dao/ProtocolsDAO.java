@@ -59,4 +59,8 @@ public class ProtocolsDAO {
     public static Map<Topic, List<ProtocolEntity>> getAllProtocols() {
         return map;
     }
+
+    public static void loadProtocols(Map<Topic, List<ProtocolEntity>> newPorotocols) {
+        map = newPorotocols;
+    }
 }

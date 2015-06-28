@@ -61,4 +61,8 @@ public class TopicDAO {
 
         return EMPTY_TOPIC;
     }
+
+    public static void loadTopics(List<Topic> topicsToLoad) {
+        topics = topicsToLoad;
+    }
 }

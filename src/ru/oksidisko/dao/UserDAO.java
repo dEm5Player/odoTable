@@ -17,10 +17,6 @@ public class UserDAO {
         users.add(new User(UniqueKeyProvider.generateLongId(KeyCategory.USER), "Leschinsky Sergey", "Lesch"));
     }
 
-    {
-        System.out.println("test");
-    }
-
     private static UserDAO instance = new UserDAO();
 
     public static UserDAO getInstance() {
@@ -51,5 +47,9 @@ public class UserDAO {
                 return user;
 
         return EMPTY_USER;
+    }
+
+    public static void loadUsers(List<User> usersToReplace) {
+        users = usersToReplace;
     }
 }
