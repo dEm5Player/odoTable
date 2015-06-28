@@ -32,7 +32,7 @@ public class ManageUsersFrame extends JInternalFrame implements ActionListener {
                 true, //maximizable
                 true);//iconifiable
 
-        controller = new Controller();
+        controller = Controller.getInstance();
         //...Create the GUI and put it in the window...
         initLayout();
 

@@ -24,18 +24,18 @@ public class UserToTopicLinkingFrame extends JInternalFrame implements ActionLis
     private final JButton specialBtn = new JButton("Special");
     private static Topic shownTopic;
     private static JLabel topicTitle = new JLabel("");
-    private static JInternalFrame instance = new UserToTopicLinkingFrame();
+    private static JInternalFrame instance = null;
     private JTable table;
     private LinkageFrameListener listener;
 
-    public UserToTopicLinkingFrame() {
+    private UserToTopicLinkingFrame() {
         super("Manage topics",
                 true, //resizable
                 true, //closable
                 true, //maximizable
                 true);//iconifiable
 
-        controller = new Controller();
+        controller = Controller.getInstance();
         //...Create the GUI and put it in the window...
         initLayout();
         //...Then set the window size or call pack...
@@ -122,6 +122,8 @@ public class UserToTopicLinkingFrame extends JInternalFrame implements ActionLis
 
     public static JInternalFrame getInstance(JFrame frame, Topic topic) {
         shownTopic = topic;
+        if (instance == null)
+            instance = new UserToTopicLinkingFrame();
         topicTitle.setText(topic.getName());
         owner = frame;
         return instance;

@@ -8,6 +8,8 @@ import java.awt.*;
 public class Starter extends JFrame implements ActionListener {
     public static final String MANAGE_USERS = "Manage users";
     public static final String MANAGE_TOPICS = "Manage topics";
+    public static final String SAVE_CONFIG = "Save Configuration";
+
 
     public static final String ACTIONS = "Actions";
     public static final String QUIT = "Quit";
@@ -50,6 +52,10 @@ public class Starter extends JFrame implements ActionListener {
         // Set up the second menu item
         createMenuItem(menu, MANAGE_TOPICS, KeyEvent.VK_T);
 
+        // Save configuration item
+        createMenuItem(menu, SAVE_CONFIG, KeyEvent.VK_S);
+
+
         //Set up the last menu item.
         createMenuItem(menu, QUIT, KeyEvent.VK_Q);
 
@@ -77,10 +83,17 @@ public class Starter extends JFrame implements ActionListener {
             case MANAGE_TOPICS:
                 createFrame(MANAGE_TOPICS);
                 break;
+            case SAVE_CONFIG:
+                saveConfig();
+                break;
             default:  //quit
                 quit();
                 break;
         }
+    }
+
+    private void saveConfig() {
+
     }
 
     //Create a new internal frame.

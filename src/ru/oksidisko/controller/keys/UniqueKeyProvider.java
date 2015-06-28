@@ -10,9 +10,9 @@ public class UniqueKeyProvider {
     }
 
     private static void initKeys() {
-        map.put(KeyCategory.USER, (long) 1);
-        map.put(KeyCategory.TOPIC, (long) 1);
-        map.put(KeyCategory.PROTOCOL, (long) 1);
+        map.put(KeyCategory.USER, (long) -1);
+        map.put(KeyCategory.TOPIC, (long) -1);
+        map.put(KeyCategory.PROTOCOL, (long) -1);
     }
 
     public static long generateLongId(KeyCategory key) {

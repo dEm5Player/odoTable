@@ -10,12 +10,17 @@ import ru.oksidisko.model.User;
 import java.util.List;
 
 public class Controller {
-    private final UserDAO userDAO = new UserDAO();
-    private final TopicDAO topicDAO = new TopicDAO();
-    private final ProtocolsDAO protocolsDAO = new ProtocolsDAO();
+    private static final UserDAO userDAO = new UserDAO();
+    private static final TopicDAO topicDAO = new TopicDAO();
+    private static final ProtocolsDAO protocolsDAO = new ProtocolsDAO();
 
-    public Controller() {
+    private static final Controller instance = new Controller();
 
+    private Controller() {
+    }
+
+    public static Controller getInstance() {
+        return instance;
     }
 
     public List<User> getAllUsers() {

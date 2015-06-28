@@ -2,7 +2,6 @@ package ru.oksidisko.dao;
 
 import ru.oksidisko.model.ProtocolEntity;
 import ru.oksidisko.model.Topic;
-import ru.oksidisko.model.User;
 
 import java.util.*;
 
@@ -14,13 +13,13 @@ public class ProtocolsDAO {
         UserDAO userDAO = UserDAO.getInstance();
         TopicDAO topicDAO = TopicDAO.getInstance();
 
-        ProtocolEntity STAB_ENTITY = new ProtocolEntity(-1, userDAO.getUserById(1), 1000, 850, new Date());
+        ProtocolEntity STAB_ENTITY = new ProtocolEntity(-1, userDAO.getUserById(0), 1000, 850, new Date());
         ProtocolEntity STAB_ENTITY2 = new ProtocolEntity(-1, userDAO.getUserById(1), 900, 350, new Date());
         List<ProtocolEntity> list = new ArrayList<>();
         list.add(STAB_ENTITY);
         list.add(STAB_ENTITY2);
 
-        map.put(topicDAO.getTopicById(1), list);
+        map.put(topicDAO.getTopicById(0), list);
     }
 
     public List<ProtocolEntity> getProtocolForTopic(Topic topic) {
@@ -51,7 +50,8 @@ public class ProtocolsDAO {
             protocolForTopic.remove(index);
             protocolForTopic.add(index, newEntity);
         } else {
-            protocolForTopic.add(newEntity); // todo: или тут эксепшен должен быть?
+            throw new RuntimeException("ProtocolsDAO.updateLinkedEntity() for unexisted topic");
+            //protocolForTopic.add(newEntity); // todo: или тут эксепшен должен быть?
         }
     }
 

@@ -29,7 +29,7 @@ public class ManageTopicsFrame extends JInternalFrame implements ActionListener 
                 true, //maximizable
                 true);//iconifiable
 
-        controller = new Controller();
+        controller = Controller.getInstance();
         //...Create the GUI and put it in the window...
         initLayout();
         //...Then set the window size or call pack...
