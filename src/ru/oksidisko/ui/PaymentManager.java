@@ -5,11 +5,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
-/*
- * InternalFrameDemo.java requires:
- *   MyInternalFrame.java
- */
-public class InternalFrameDemo extends JFrame implements ActionListener {
+public class PaymentManager extends JFrame implements ActionListener {
     public static final String MANAGE_USERS = "Manage users";
     public static final String MANAGE_TOPICS = "Manage topics";
 
@@ -17,7 +13,7 @@ public class InternalFrameDemo extends JFrame implements ActionListener {
     public static final String QUIT = "Quit";
     JDesktopPane desktop;
 
-    public InternalFrameDemo() {
+    public PaymentManager() {
         super("InternalFrameDemo");
 
         //Make the big window be indented 50 pixels from each edge
@@ -114,7 +110,7 @@ public class InternalFrameDemo extends JFrame implements ActionListener {
         JFrame.setDefaultLookAndFeelDecorated(true);
 
         //Create and set up the window.
-        InternalFrameDemo frame = new InternalFrameDemo();
+        PaymentManager frame = new PaymentManager();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         //Display the window.

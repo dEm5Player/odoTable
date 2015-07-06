@@ -115,7 +115,8 @@ public class UserToTopicLinkingFrame extends JInternalFrame implements ActionLis
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setPreferredScrollableViewportSize(new Dimension(500, 70));
         table.setFillsViewportHeight(true);
-        table.setRowSelectionInterval(0, 0);
+        if(table.getModel().getRowCount() > 0)
+            table.setRowSelectionInterval(0, 0);
 
         return table;
     }

@@ -1,11 +1,13 @@
 package ru.oksidisko.ui;
 
+import ru.oksidisko.dao.UserDAO;
 import ru.oksidisko.model.User;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class AddUserToTopicDialog extends JDialog {
     private LinkageFrameListener listener;
@@ -13,9 +15,8 @@ public class AddUserToTopicDialog extends JDialog {
     private JButton cancelBtn = new JButton("Cancel");
     private JTextField fioField = new JTextField();
     private JTextField nameField = new JTextField();
-    private User editedUser = null;
-    private String[] petStrings = { "Shine", "dEm", "Lesch", "Rabbit", "Pig" };
-    private JComboBox petList = new JComboBox<>(petStrings);
+    private User editedUser;
+    private JComboBox<String> petList = new JComboBox<String>();
 
 
     /**
@@ -31,6 +32,15 @@ public class AddUserToTopicDialog extends JDialog {
         initLayout();
         initListeners();
         setMinimumSize(new Dimension(500, 200));
+        initUsersList();
+    }
+
+    private void initUsersList() {
+        List<User> userList = UserDAO.getAllUsers();
+
+        for (User user : userList) {
+            petList.addItem(user.getName());
+        }
     }
 
     /**
