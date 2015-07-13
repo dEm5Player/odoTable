@@ -1,6 +1,7 @@
 package ru.oksidisko.ui;
 
 import ru.oksidisko.controller.Controller;
+import ru.oksidisko.dao.TopicDAO;
 import ru.oksidisko.dao.UserDAO;
 import ru.oksidisko.model.User;
 import ru.oksidisko.ui.model.UserTableModel;
@@ -123,7 +124,8 @@ public class ManageUsersFrame extends JInternalFrame implements ActionListener {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setPreferredScrollableViewportSize(new Dimension(500, 70));
         table.setFillsViewportHeight(true);
-        table.setRowSelectionInterval(0, 0);
+        if (tableModel.getRowCount() > 0)
+            table.setRowSelectionInterval(0, 0);
 
         return table;
     }

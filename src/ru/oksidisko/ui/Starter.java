@@ -35,7 +35,8 @@ public class Starter extends JFrame implements ActionListener {
                 screenSize.height - inset * 2);
 
         //Set up the GUI.
-        createFrame(MANAGE_USERS); //create first "window"
+        createFrame(MANAGE_USERS);
+        createFrame(MANAGE_TOPICS);
         setContentPane(desktop);
         setJMenuBar(createMenuBar());
 
@@ -143,8 +144,18 @@ public class Starter extends JFrame implements ActionListener {
         JFrame.setDefaultLookAndFeelDecorated(true);
 
         //Create and set up the window.
-        Starter frame = new Starter();
+        final Starter frame = new Starter();
+        frame.loadConfig();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.out.println("Closed");
+                frame.saveConfig();
+                e.getWindow().dispose();
+            }
+        });
 
         //Display the window.
         frame.setVisible(true);

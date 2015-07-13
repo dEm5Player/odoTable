@@ -5,35 +5,22 @@ import ru.oksidisko.controller.keys.UniqueKeyProvider;
 import ru.oksidisko.model.Topic;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class TopicDAO {
+    private static List<Listener> listeners = new ArrayList<>();
     private static final Topic EMPTY_TOPIC = new Topic(-1, "Empty", new Date());
     private static List<Topic> topics = new ArrayList<>();
 
-    static {
-        Calendar cal = Calendar.getInstance();
-        cal.set(2016, Calendar.JANUARY, 15);
-        Date date = cal.getTime();
-
-
-        topics.add(new Topic(UniqueKeyProvider.generateLongId(KeyCategory.TOPIC), "Vizov", date));
-
-        cal.set(2016, Calendar.FEBRUARY, 25);
-        date = cal.getTime();
-        topics.add(new Topic(UniqueKeyProvider.generateLongId(KeyCategory.TOPIC), "Camp", date));
-
-        cal.set(2016, Calendar.JULY, 7);
-        date = cal.getTime();
-        topics.add(new Topic(UniqueKeyProvider.generateLongId(KeyCategory.TOPIC), "Equipment", date));
-    }
-
     private static TopicDAO instance = new TopicDAO();
 
-    public static TopicDAO getInstance() {
-        return instance;
+    public static void addListener(Listener listener) {
+        listeners.add(listener);
+    }
+
+    public static void removeListener(Listener listener) {
+        listeners.remove(listener);
     }
 
     public static List<Topic> getAllTopics() {
@@ -63,6 +50,17 @@ public class TopicDAO {
     }
 
     public static void loadTopics(List<Topic> topicsToLoad) {
-        topics = topicsToLoad;
+        topics = new ArrayList<Topic>(topicsToLoad);
+        notifyUpdated();
+    }
+
+    private static void notifyUpdated() {
+        for (Listener listener : listeners) {
+            listener.topicsLoaded();
+        }
+    }
+
+    public interface Listener {
+        void topicsLoaded();
     }
 }

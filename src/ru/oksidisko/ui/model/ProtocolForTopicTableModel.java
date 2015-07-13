@@ -47,4 +47,8 @@ public class ProtocolForTopicTableModel extends AbstractTableModel {
         ProtocolEntity entity = data.get(index);
         return entity;
     }
+
+    public ProtocolEntity getEntity(int row) {
+        return data.get(row);
+    }
 }

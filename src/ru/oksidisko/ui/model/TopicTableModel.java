@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TopicTableModel extends AbstractTableModel {
 
-    private static final String[] COLUMN_NAMES = {"Id", "Name",
+    public static final String[] COLUMN_NAMES = {"Id", "Name",
             "Date"};
 
     private List<Topic> topicList = new ArrayList<>();

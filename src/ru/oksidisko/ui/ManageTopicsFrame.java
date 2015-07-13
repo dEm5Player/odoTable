@@ -1,16 +1,19 @@
 package ru.oksidisko.ui;
 
 import ru.oksidisko.controller.Controller;
+import ru.oksidisko.dao.TopicDAO;
 import ru.oksidisko.model.Topic;
 import ru.oksidisko.ui.model.TopicTableModel;
 
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ManageTopicsFrame extends JInternalFrame implements ActionListener {
     private static final String SELECT_TOPIC_FOR_UPDATE = "Select topic for update";
+    private static final java.lang.Object SELECT_TOPIC_FOR_REMOVE = "Select topic for remove";
     private static JFrame owner = null;
     static final int xOffset = 30, yOffset = 30;
     private final JButton addBtn = new JButton("Add");
@@ -64,6 +67,15 @@ public class ManageTopicsFrame extends JInternalFrame implements ActionListener 
                 }
             }
         };
+
+        TopicDAO.addListener(new TopicDAO.Listener() {
+            @Override
+            public void topicsLoaded() {
+                ((TopicTableModel)table.getModel()).setData(controller.getAllTopics());
+                ((TopicTableModel)table.getModel()).fireTableDataChanged();
+                repaint();
+            }
+        });
     }
     private void initLayout() {
         setLayout(new GridBagLayout());
@@ -102,12 +114,18 @@ public class ManageTopicsFrame extends JInternalFrame implements ActionListener 
     }
 
     private JTable createUsersTable() {
-
         TopicTableModel tableModel = new TopicTableModel();
         tableModel.setData(controller.getAllTopics());
-        table = new JTable(tableModel);
+        final TableCellRenderer renderer = new TopicsCellRenderer();
+        table = new JTable(tableModel) {
+            @Override
+            public TableCellRenderer getCellRenderer(int row, int column) {
+                return renderer;
+            }
+        };
         table.setPreferredScrollableViewportSize(new Dimension(500, 70));
         table.setFillsViewportHeight(true);
+        tableModel.fireTableDataChanged();
 
         return table;
     }
@@ -135,6 +153,8 @@ public class ManageTopicsFrame extends JInternalFrame implements ActionListener 
         } else if (e.getSource() == deleteBtn) {
             System.out.println("Delete button pressed");
             int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1)
+                JOptionPane.showMessageDialog(this, SELECT_TOPIC_FOR_REMOVE);
             controller.removeTopic(selectedRow);
             table.repaint();
         } else if (e.getSource() == specialBtn) {

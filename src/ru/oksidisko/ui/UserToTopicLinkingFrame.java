@@ -7,6 +7,7 @@ import ru.oksidisko.model.User;
 import ru.oksidisko.ui.model.ProtocolForTopicTableModel;
 
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,8 @@ import java.util.List;
 
 public class UserToTopicLinkingFrame extends JInternalFrame implements ActionListener {
     public static final String SELECT_USER_FOR_UPDATE = "Select topic for update";
+    public static final int PAID_COLUMN_INDEX = 3;
+    private static final int DATE_COLUMN_INDEX = 4;
     private final Controller controller;
     private static JFrame owner = null;
     private static final int xOffset = 30, yOffset = 30;
@@ -118,6 +121,9 @@ public class UserToTopicLinkingFrame extends JInternalFrame implements ActionLis
         if(table.getModel().getRowCount() > 0)
             table.setRowSelectionInterval(0, 0);
 
+        table.getColumnModel().getColumn(PAID_COLUMN_INDEX).setCellRenderer(new PaidCellRenderer());
+        table.getColumnModel().getColumn(DATE_COLUMN_INDEX).setCellRenderer(new DateCellRenderer());
+
         return table;
     }
 
@@ -161,4 +167,38 @@ public class UserToTopicLinkingFrame extends JInternalFrame implements ActionLis
         return index < 0 ? null : ((ProtocolForTopicTableModel)table.getModel()).getEntityById(index);
     }
 
+    private class PaidCellRenderer implements TableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            ProtocolEntity protocolEntity = ((ProtocolForTopicTableModel)table.getModel()).getEntity(row);
+            JLabel label = new JLabel();
+            label.setOpaque(true);
+            if (protocolEntity.getPaid() < protocolEntity.getTotalAmountToPay()) { // not paid completely
+                label.setBackground(Color.RED);
+            } else if (protocolEntity.getPaid() == protocolEntity.getTotalAmountToPay()) {
+                label.setBackground(Color.YELLOW);
+            } else {
+                label.setBackground(Color.BLUE);
+            }
+            label.setText(String.valueOf(protocolEntity.getPaid()));
+            return label;
+        }
+    }
+
+    private class DateCellRenderer implements TableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            ProtocolEntity protocolEntity = ((ProtocolForTopicTableModel)table.getModel()).getEntity(row);
+            JLabel label = new JLabel();
+            label.setOpaque(true);
+            if (protocolEntity.getEndDate().before(new Date())) { // expired
+                label.setBackground(Color.RED);
+            } else {
+                label.setBackground(Color.YELLOW);
+            }
+            label.setText(String.valueOf(protocolEntity.getEndDate()));
+            return label;
+
+        }
+    }
 }

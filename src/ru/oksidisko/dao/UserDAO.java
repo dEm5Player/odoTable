@@ -13,11 +13,6 @@ public class UserDAO {
     public static User EMPTY_USER = new User(-1, "Empty", "Empty");
 
     private static List<User> users = new ArrayList<>();
-    static {
-        users.add(new User(UniqueKeyProvider.generateLongId(KeyCategory.USER), "Andreev Denis", "dEm"));
-        users.add(new User(UniqueKeyProvider.generateLongId(KeyCategory.USER), "Antonov Kirill", "Shine"));
-        users.add(new User(UniqueKeyProvider.generateLongId(KeyCategory.USER), "Leschinsky Sergey", "Lesch"));
-    }
 
     public static void addListener(Listener listener) {
         listeners.add(listener);

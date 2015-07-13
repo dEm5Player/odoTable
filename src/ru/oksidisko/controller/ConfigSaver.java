@@ -12,34 +12,45 @@ import java.util.*;
 
 public class ConfigSaver {
 
-    public static final String USERS = "d:/users.txt";
-    public static final String TOPICS = "d:/topics.txt";
-    public static final String PROTOCOLS = "d:/protocols.txt";
+    public static final String USERS = "d:/_users.txt";
+    public static final String TOPICS = "d:/_topics.txt";
+    public static final String PROTOCOLS = "d:/_protocols.txt";
 
     public void restoreFromFile() {
-        try {
-            DataInputStream loadFileUsers = new DataInputStream(new FileInputStream(USERS));
-            DataInputStream loadFileTopics = new DataInputStream(new FileInputStream(TOPICS));
-            DataInputStream loadFileProtocols = new DataInputStream(new FileInputStream(PROTOCOLS));
+        if (fileExistenceCheck(USERS, TOPICS, PROTOCOLS)) {
+            try {
 
-            List<User> users = loadUsers(loadFileUsers);
-            List<Topic> topics = loadTopics(loadFileTopics);
-            Map<Topic, List<ProtocolEntity>> protocols = loadProtocols(loadFileProtocols);
+                DataInputStream loadFileUsers = new DataInputStream(new FileInputStream(USERS));
+                DataInputStream loadFileTopics = new DataInputStream(new FileInputStream(TOPICS));
+                DataInputStream loadFileProtocols = new DataInputStream(new FileInputStream(PROTOCOLS));
 
-            UserDAO.loadUsers(users);
-            TopicDAO.loadTopics(topics);
-            ProtocolsDAO.loadProtocols(protocols);
+                List<User> users = loadUsers(loadFileUsers);
+                List<Topic> topics = loadTopics(loadFileTopics);
+                Map<Topic, List<ProtocolEntity>> protocols = loadProtocols(loadFileProtocols);
 
-            closeConnections(loadFileUsers);
-            closeConnections(loadFileTopics);
-            closeConnections(loadFileProtocols);
+                UserDAO.loadUsers(users);
+                TopicDAO.loadTopics(topics);
+                ProtocolsDAO.loadProtocols(protocols);
+
+                closeConnections(loadFileUsers);
+                closeConnections(loadFileTopics);
+                closeConnections(loadFileProtocols);
 
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.exit(0);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                System.exit(0);
+            }
         }
+    }
 
+    private boolean fileExistenceCheck(String... paths) {
+        for (String path : paths) {
+            File f = new File(path);
+            if (!f.exists() || f.isDirectory())
+                return false;
+        }
+        return true;
     }
 
     private void closeConnections(DataInputStream stream) {
@@ -71,8 +82,6 @@ public class ConfigSaver {
             closeConnections(saveFileUsers);
             closeConnections(saveFileTopics);
             closeConnections(saveFileProtocols);
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.exit(0);

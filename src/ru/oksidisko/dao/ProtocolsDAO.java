@@ -8,17 +8,6 @@ import java.util.*;
 public class ProtocolsDAO {
     private static Map<Topic, List<ProtocolEntity>> map = new HashMap<>();
 
-
-    static {
-        ProtocolEntity STAB_ENTITY = new ProtocolEntity(-1, UserDAO.getUserById(0), 1000, 850, new Date());
-        ProtocolEntity STAB_ENTITY2 = new ProtocolEntity(-1, UserDAO.getUserById(1), 900, 350, new Date());
-        List<ProtocolEntity> list = new ArrayList<>();
-        list.add(STAB_ENTITY);
-        list.add(STAB_ENTITY2);
-
-        map.put(TopicDAO.getTopicById(0), list);
-    }
-
     public static List<ProtocolEntity> getProtocolForTopic(Topic topic) {
         List<ProtocolEntity> protocolForTopic = map.get(topic);
         if (protocolForTopic == null) {
@@ -48,7 +37,7 @@ public class ProtocolsDAO {
             protocolForTopic.add(index, newEntity);
         } else {
             throw new RuntimeException("ProtocolsDAO.updateLinkedEntity() for unexisted topic");
-            //protocolForTopic.add(newEntity); // todo: или тут эксепшен должен быть?
+            //protocolForTopic.add(newEntity); // todo: пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ?
         }
     }
 

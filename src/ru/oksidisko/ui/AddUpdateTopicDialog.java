@@ -1,11 +1,18 @@
 package ru.oksidisko.ui;
 
+import org.jdatepicker.DateModel;
+import org.jdatepicker.JDateComponentFactory;
+import org.jdatepicker.JDatePicker;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 import ru.oksidisko.model.Topic;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.util.Date;
 
 public class AddUpdateTopicDialog extends JDialog {
@@ -14,12 +21,13 @@ public class AddUpdateTopicDialog extends JDialog {
     private JButton okBtn = new JButton("Ok");
     private JButton cancelBtn = new JButton("Cancel");
     private JTextField titleField = new JTextField();
-    private JTextField dateField = new JTextField();
+    private JDatePicker datePicker;
 
 
     public AddUpdateTopicDialog(JFrame owner, TopicChangeListener listener) {
         super(owner);
         this.listener = listener;
+        datePicker = (new JDateComponentFactory()).createJDatePicker();
         setTitle("Add Topic");
         setModal(true);
         initLayout();
@@ -32,7 +40,8 @@ public class AddUpdateTopicDialog extends JDialog {
         editedTopic = topic;
 
         titleField.setText(topic.getName());
-        dateField.setText(topic.getDate().toString());
+        datePicker.setTextEditable(true);
+        datePicker.setShowYearButtons(true);
     }
 
     private void initListeners() {
@@ -50,7 +59,18 @@ public class AddUpdateTopicDialog extends JDialog {
     }
 
     private Topic buildTopic() {
-        return new Topic(-1, titleField.getText(), new Date());
+        return new Topic(-1, titleField.getText(), dateDateFromPicker(datePicker));
+    }
+
+    private Date dateDateFromPicker(JDatePicker datePicker) {
+        DateModel model = datePicker.getModel();
+        int year = model.getYear();
+        int month = model.getMonth();
+        int day = model.getDay();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day, 0, 0, 1);
+        return calendar.getTime();
     }
 
     private void initLayout() {
@@ -75,7 +95,7 @@ public class AddUpdateTopicDialog extends JDialog {
 
         c.gridx = 1;
         c.weightx = 0.0;
-        add(dateField, c);
+        add((JComponent)datePicker, c);
 
         c.gridx = 0;
         c.gridy = 2;
